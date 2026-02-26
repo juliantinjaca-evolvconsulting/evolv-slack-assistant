@@ -1,0 +1,32 @@
+{
+  "name": "sales-assistant-slack",
+  "version": "1.0.0",
+  "description": "Sales Assistant Slack Bot with Snowflake Cortex",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest --verbose",
+    "test:unit": "jest tests/unit --verbose",
+    "test:integration": "INTEGRATION=true jest tests/integration --verbose",
+    "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "@slack/bolt": "^4.3.0",
+    "dotenv": "^16.3.1",
+    "jsonwebtoken": "^9.0.2",
+    "playwright": "^1.58.2"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.7"
+  },
+  "engines": {
+    "node": "18 || 20 || 22"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFiles": ["./tests/setup.js"],
+    "testMatch": ["**/tests/**/*.test.js"]
+  }
+}

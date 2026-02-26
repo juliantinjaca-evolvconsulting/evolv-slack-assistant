@@ -1,0 +1,48 @@
+# Dependencies
+node_modules
+
+# Git
+.git
+.gitignore
+
+# Docker files (not needed inside container)
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Environment files (secrets should be injected at runtime)
+.env
+.env.*
+*.env
+
+# RSA keys
+*.pem
+*.p8
+*.pub
+rsa_key*
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+*.test.js
+__tests__
+coverage
+
+# Documentation
+*.md
+!README.md
+
+# Development files
+.thread-store.json

@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+
+# Environment files (contain secrets)
+.env
+.env.*
+*.env
+
+# RSA keys (sensitive)
+*.p8
+*.pem
+*.pub
+rsa_key*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# Thread store (local dev)
+.thread-store.json
+.thread-store
+
+# Python (if any)
+__pycache__/
+.venv/
+venv/
+
+# Misc dev files
+*.sqlite
+debug_traces.py
