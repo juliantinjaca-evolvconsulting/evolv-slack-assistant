@@ -1,0 +1,1367 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Slack App Setup Guide | evolv</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            :root {
+                --evolv-orange: #D15635;
+                --evolv-dark: #343434;
+                --evolv-grey: #D9D9D9;
+                --evolv-blue: #2E3952;
+                --evolv-light-orange: #D68B60;
+                --slack-purple: #4A154B;
+                --slack-green: #2EB67D;
+            }
+
+            body {
+                font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+                background: #fafbfc;
+                color: var(--evolv-dark);
+                line-height: 1.8;
+                font-size: 16px;
+            }
+
+            #wrapper {
+                display: flex;
+                max-width: 1800px;
+                margin: 0 auto;
+            }
+
+            /* Header */
+            #header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3.5rem;
+                background: white;
+                border-bottom: 2px solid var(--evolv-orange);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                padding: 0 2rem;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            }
+
+            #header h1 {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 1.8rem;
+                font-weight: 300;
+                color: var(--evolv-orange);
+                margin: 0;
+            }
+
+            #header h1 a {
+                color: var(--evolv-orange);
+                text-decoration: none;
+                background: linear-gradient(135deg, var(--evolv-orange) 0%, var(--evolv-light-orange) 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            /* Sidebar */
+            #sidebar {
+                position: fixed;
+                top: 3.5rem;
+                left: 0;
+                width: 22rem;
+                height: calc(100vh - 3.5rem);
+                background: white;
+                border-right: 1px solid var(--evolv-grey);
+                overflow-y: auto;
+                padding: 2rem;
+            }
+
+            #intro {
+                margin-bottom: 3rem;
+                text-align: center;
+            }
+
+            #intro .logo {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 3rem;
+                font-weight: 300;
+                color: var(--evolv-orange);
+                background: linear-gradient(135deg, var(--evolv-orange) 0%, var(--evolv-light-orange) 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                display: block;
+                margin-bottom: 0.5rem;
+            }
+
+            #intro header h2 {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 1.2rem;
+                font-weight: 600;
+                color: var(--evolv-blue);
+                margin-bottom: 0.5rem;
+            }
+
+            #intro header p {
+                font-size: 0.9rem;
+                color: var(--evolv-blue);
+                opacity: 0.8;
+            }
+
+            .nav-section {
+                margin-bottom: 2rem;
+            }
+
+            .nav-section h3 {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                color: var(--evolv-orange);
+                margin-bottom: 1rem;
+                padding-bottom: 0.5rem;
+                border-bottom: 2px solid var(--evolv-grey);
+            }
+
+            .nav-section ul {
+                list-style: none;
+            }
+
+            .nav-section ul li {
+                margin-bottom: 0.8rem;
+            }
+
+            .nav-section ul li a {
+                color: var(--evolv-blue);
+                text-decoration: none;
+                font-size: 0.95rem;
+                transition: color 0.3s ease;
+                display: block;
+                padding: 0.3rem 0;
+            }
+
+            .nav-section ul li a:hover {
+                color: var(--evolv-orange);
+            }
+
+            /* Main Content */
+            #main {
+                margin-left: 22rem;
+                margin-top: 3.5rem;
+                padding: 3rem;
+                flex: 1;
+                max-width: 1200px;
+            }
+
+            article.post {
+                background: white;
+                padding: 3rem;
+                margin-bottom: 2rem;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+                border-left: 4px solid var(--evolv-orange);
+            }
+
+            article.post header .title h2 {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 2rem;
+                font-weight: 600;
+                color: var(--evolv-dark);
+                margin-bottom: 0.5rem;
+            }
+
+            article.post header .title p {
+                font-size: 1.1rem;
+                color: var(--evolv-blue);
+                opacity: 0.8;
+            }
+
+            article.post h3 {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--evolv-dark);
+                margin: 2rem 0 1rem 0;
+            }
+
+            article.post h4 {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 1.2rem;
+                font-weight: 600;
+                color: var(--evolv-orange);
+                margin: 1.5rem 0 1rem 0;
+            }
+
+            article.post p {
+                margin-bottom: 1.5rem;
+                line-height: 1.8;
+            }
+
+            article.post ul, article.post ol {
+                margin: 1.5rem 0 1.5rem 2rem;
+                line-height: 1.8;
+            }
+
+            article.post ul li, article.post ol li {
+                margin-bottom: 0.5rem;
+            }
+
+            article.post code,
+            article.post pre {
+                background: #1e293b;
+                color: #e2e8f0;
+                padding: 0.2rem 0.5rem;
+                border-radius: 4px;
+                font-family: 'Courier New', monospace;
+                font-size: 0.9rem;
+            }
+
+            article.post pre {
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+                overflow-x: auto;
+            }
+
+            article.post pre code {
+                padding: 0;
+                background: transparent;
+            }
+
+            .command-block {
+                background: #1e293b;
+                color: #34d399;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                margin: 1rem 0;
+                font-family: 'Courier New', monospace;
+                font-size: 0.95rem;
+                border-left: 4px solid var(--evolv-orange);
+            }
+
+            .url-block {
+                background: #1e293b;
+                color: #60a5fa;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                margin: 1rem 0;
+                font-family: 'Courier New', monospace;
+                font-size: 0.95rem;
+                border-left: 4px solid var(--slack-purple);
+            }
+
+            .url-block a {
+                color: #60a5fa;
+                text-decoration: none;
+            }
+
+            .url-block a:hover {
+                text-decoration: underline;
+            }
+
+            .note-block {
+                background: rgba(209, 86, 53, 0.1);
+                padding: 1.5rem;
+                border-radius: 8px;
+                margin: 1.5rem 0;
+                border-left: 4px solid var(--evolv-orange);
+            }
+
+            .note-block strong {
+                color: var(--evolv-orange);
+                font-weight: 700;
+            }
+
+            .warning-block {
+                background: rgba(46, 57, 82, 0.08);
+                padding: 2rem;
+                border-radius: 12px;
+                margin: 1.5rem 0;
+                border-left: 6px solid var(--evolv-blue);
+                box-shadow: 0 2px 12px rgba(46, 57, 82, 0.1);
+            }
+
+            .warning-block h4 {
+                color: var(--evolv-blue);
+                margin-top: 1.5rem;
+                margin-bottom: 0.8rem;
+                font-size: 1.1rem;
+            }
+
+            .warning-block h4:first-of-type {
+                margin-top: 0;
+            }
+
+            .warning-block p {
+                margin-bottom: 1rem;
+            }
+
+            .warning-block strong {
+                color: var(--evolv-blue);
+                font-weight: 700;
+            }
+
+            .success-block {
+                background: rgba(46, 182, 125, 0.1);
+                padding: 1.5rem;
+                border-radius: 8px;
+                margin: 1.5rem 0;
+                border-left: 4px solid var(--slack-green);
+            }
+
+            .success-block strong {
+                color: var(--slack-green);
+                font-weight: 700;
+            }
+
+            .section-label {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: var(--evolv-orange);
+                text-transform: uppercase;
+                letter-spacing: 3px;
+                margin-bottom: 1rem;
+                display: inline-block;
+                padding: 0.5rem 1.5rem;
+                background: rgba(209, 86, 53, 0.1);
+                border-left: 3px solid var(--evolv-orange);
+            }
+
+            .step-number {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 2.5rem;
+                height: 2.5rem;
+                background: linear-gradient(135deg, var(--evolv-orange) 0%, var(--evolv-light-orange) 100%);
+                color: white;
+                border-radius: 50%;
+                font-family: 'Montserrat', sans-serif;
+                font-weight: 700;
+                font-size: 1.2rem;
+                margin-right: 1rem;
+            }
+
+            .token-card {
+                background: linear-gradient(135deg, rgba(74, 21, 75, 0.1) 0%, rgba(74, 21, 75, 0.05) 100%);
+                padding: 1.5rem;
+                border-radius: 8px;
+                margin: 1rem 0;
+                border: 2px solid rgba(74, 21, 75, 0.3);
+            }
+
+            .token-card h4 {
+                color: var(--slack-purple);
+                margin-top: 0;
+            }
+
+            .token-card code {
+                background: var(--slack-purple);
+                color: white;
+            }
+
+            .checklist {
+                list-style: none;
+                margin-left: 0 !important;
+            }
+
+            .checklist li {
+                padding: 0.8rem 1rem;
+                background: rgba(46, 182, 125, 0.08);
+                border-radius: 6px;
+                margin-bottom: 0.5rem;
+                border-left: 3px solid var(--slack-green);
+            }
+
+            .checklist li::before {
+                content: "✓";
+                color: var(--slack-green);
+                font-weight: bold;
+                margin-right: 0.8rem;
+            }
+
+            #footer {
+                text-align: center;
+                padding: 3rem 2rem;
+                background: var(--evolv-blue);
+                color: white;
+                margin-top: 3rem;
+            }
+
+            #footer .logo {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 2rem;
+                font-weight: 300;
+                margin-bottom: 1rem;
+            }
+
+            #footer p {
+                font-size: 0.9rem;
+                opacity: 0.9;
+            }
+
+            @media screen and (max-width: 1280px) {
+                #sidebar {
+                    width: 18rem;
+                }
+
+                #main {
+                    margin-left: 18rem;
+                }
+            }
+
+            @media screen and (max-width: 980px) {
+                #wrapper {
+                    flex-direction: column;
+                }
+
+                #sidebar {
+                    position: relative;
+                    width: 100%;
+                    height: auto;
+                    border-right: none;
+                    border-bottom: 1px solid var(--evolv-grey);
+                }
+
+                #main {
+                    margin-left: 0;
+                    padding: 2rem;
+                }
+            }
+
+            @media screen and (max-width: 736px) {
+                #header {
+                    padding: 0 1rem;
+                }
+
+                #header h1 {
+                    font-size: 1.4rem;
+                }
+
+                article.post {
+                    padding: 2rem;
+                }
+
+                article.post header .title h2 {
+                    font-size: 1.5rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+
+        <!-- Header -->
+        <header id="header">
+            <h1><a href="#">Slack App Setup Guide</a></h1>
+        </header>
+
+        <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Sidebar -->
+            <section id="sidebar">
+
+                <!-- Intro -->
+                <section id="intro">
+                    <span class="logo">evolv</span>
+                    <header>
+                        <h2>Sales Assistant</h2>
+                        <p>Slack App Configuration</p>
+                    </header>
+                </section>
+
+                <!-- Navigation -->
+                <div class="nav-section">
+                    <h3>Slack Setup</h3>
+                    <ul>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#prerequisites">Prerequisites</a></li>
+                        <li><a href="#step1">STEP 1: Login to Slack API</a></li>
+                        <li><a href="#step2">STEP 2: Create App from Manifest</a></li>
+                        <li><a href="#step3">STEP 3: Get the Bot Token</a></li>
+                        <li><a href="#step4">STEP 4: Create App-Level Token</a></li>
+                        <li><a href="#step5">STEP 5: Configure User Group</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Snowflake Setup</h3>
+                    <ul>
+                        <li><a href="#step6">STEP 6: Generate RSA Keypair</a></li>
+                        <li><a href="#step7">STEP 7: Create Service Account</a></li>
+                        <li><a href="#step8">STEP 8: Create Thread Table</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Deployment</h3>
+                    <ul>
+                        <li><a href="#step9">STEP 9: Clone Repository</a></li>
+                        <li><a href="#step10">STEP 10: Environment Variables</a></li>
+                        <li><a href="#step11">STEP 11: Run the Application</a></li>
+                        <li><a href="#verification">Final Verification</a></li>
+                    </ul>
+                </div>
+
+            </section>
+
+            <!-- Main -->
+            <div id="main">
+
+                <!-- Overview -->
+                <article class="post" id="overview">
+                    <header>
+                        <div class="title">
+                            <h2>Slack App Setup Guide</h2>
+                            <p>Step-by-step instructions for creating and configuring your Sales Assistant Slack App</p>
+                        </div>
+                    </header>
+                    <p>This guide walks you through the process of creating a Slack App that connects to Snowflake Cortex Agents. 
+                    By the end of this guide, you will have:</p>
+                    <ul>
+                        <li>A Slack App installed in your workspace</li>
+                        <li>A <strong>Bot Token</strong> (<code>xoxb-...</code>) for API authentication</li>
+                        <li>An <strong>App-Level Token</strong> (<code>xapp-...</code>) for Socket Mode connection</li>
+                        <li>A <strong>User Group ID</strong> (<code>S...</code>) to control who can access the bot</li>
+                    </ul>
+                    <p>These are required configuration items for running the Sales Assistant bot.</p>
+                </article>
+
+                <!-- Prerequisites -->
+                <article class="post" id="prerequisites">
+                    <header>
+                        <div class="title">
+                            <h2>Prerequisites</h2>
+                            <p>What you need before getting started</p>
+                        </div>
+                    </header>
+
+                    <div class="warning-block">
+                        <h4><strong>1. Slack Workspace Access</strong></h4>
+                        <p>You need <strong>admin access</strong> to a Slack workspace where you want to install the app. 
+                        If you don't have admin access, contact your workspace administrator.</p>
+
+                        <h4><strong>2. Manifest File</strong></h4>
+                        <p>You need the <code>manifest.json</code> file from the project repository. 
+                        This file contains all the app configuration (permissions, events, features).</p>
+
+                        <h4><strong>3. Slack Account</strong></h4>
+                        <p>You must be logged into Slack with the account that has admin permissions for the target workspace.</p>
+                    </div>
+                </article>
+
+                <!-- STEP 1 -->
+                <article class="post" id="step1">
+                    <header>
+                        <div class="title">
+                            <h2><span class="step-number">1</span>Login to Slack API</h2>
+                            <p>Access the Slack App management portal</p>
+                        </div>
+                    </header>
+
+                    <h3>Navigate to Slack API Portal</h3>
+                    <p>Open your browser and go to the Slack API applications page:</p>
+                    
+                    <div class="url-block">
+                        <a href="https://api.slack.com/apps" target="_blank">https://api.slack.com/apps</a>
+                    </div>
+
+                    <h3>Sign In</h3>
+                    <p>If you're not already logged in, Slack will prompt you to sign in. 
+                    Use the account that has <strong>admin permissions</strong> for the workspace where you want to install the app.</p>
+
+                    <div class="note-block">
+                        <strong>Note:</strong> Make sure you're signing into the correct Slack workspace. 
+                        If you belong to multiple workspaces, you can switch between them from the top-right dropdown after logging in.
+                    </div>
+
+                    <h3>View Your Apps</h3>
+                    <p>Once logged in, you'll see the "Your Apps" dashboard. This page lists all Slack apps you've created or have access to manage.</p>
+                </article>
+
+                <!-- STEP 2 -->
+                <article class="post" id="step2">
+                    <header>
+                        <div class="title">
+                            <h2><span class="step-number">2</span>Create App from Manifest</h2>
+                            <p>Use the manifest file to create a pre-configured app</p>
+                        </div>
+                    </header>
+
+                    <h3>Start App Creation</h3>
+                    <p>From the "Your Apps" page, click the <strong>"Create New App"</strong> button (usually green, top-right corner).</p>
+
+                    <h3>Choose Creation Method</h3>
+                    <p>You'll see two options. Select:</p>
+                    <div class="command-block">From an app manifest</div>
+                    <p>This option allows you to create an app with all configurations pre-set from a JSON file.</p>
+
+                    <h3>Select Your Workspace</h3>
+                    <p>Choose the workspace where you want to install the app from the dropdown menu, then click <strong>"Next"</strong>.</p>
+
+                    <div class="note-block">
+                        <strong>Important:</strong> You must have admin permissions in the selected workspace to complete the installation.
+                    </div>
+
+                    <h3>Paste the Manifest</h3>
+                    <p>You'll see a text editor with two tabs: <strong>YAML</strong> and <strong>JSON</strong>. 
+                    Make sure <strong>JSON</strong> is selected, then:</p>
+                    <ol>
+                        <li>Open the <code>manifest.json</code> file from your project</li>
+                        <li>Copy the entire contents</li>
+                        <li>Paste it into the editor (replacing any existing content)</li>
+                        <li>Click <strong>"Next"</strong></li>
+                    </ol>
+
+                    <h3>Review and Create</h3>
+                    <p>Slack will show you a summary of the app configuration:</p>
+                    <ul>
+                        <li><strong>App Name:</strong> Sales Assistant</li>
+                        <li><strong>Bot Scopes:</strong> assistant:write, chat:write, files:write, etc.</li>
+                        <li><strong>Socket Mode:</strong> Enabled</li>
+                        <li><strong>Events:</strong> message.im, assistant_thread_started, etc.</li>
+                    </ul>
+                    <p>Review the settings, then click <strong>"Create"</strong>.</p>
+
+                    <div class="success-block">
+                        <strong>Success!</strong> Your app is now created. You'll be redirected to the app's "Basic Information" page.
+                    </div>
+                </article>
+
+                <!-- STEP 3 -->
+                <article class="post" id="step3">
+                    <header>
+                        <div class="title">
+                            <h2><span class="step-number">3</span>Get the Bot Token</h2>
+                            <p>Install the app and retrieve the Bot User OAuth Token</p>
+                        </div>
+                    </header>
+
+                    <h3>Navigate to OAuth & Permissions</h3>
+                    <p>From your app's settings page, look at the left sidebar and click on:</p>
+                    <div class="command-block">OAuth & Permissions</div>
+
+                    <h3>Install App to Workspace</h3>
+                    <p>At the top of the page, you'll see an <strong>"Install to Workspace"</strong> button. Click it.</p>
+                    <p>Slack will show you a permission request screen listing all the scopes your app is requesting. 
+                    Review them and click <strong>"Allow"</strong>.</p>
+
+                    <h3>Copy the Bot Token</h3>
+                    <p>After installation, you'll be redirected back to the OAuth & Permissions page. 
+                    You'll now see a <strong>"Bot User OAuth Token"</strong> section with a token that starts with:</p>
+
+                    <div class="token-card">
+                        <h4>Bot User OAuth Token</h4>
+                        <p>This token is used for API calls to Slack (sending messages, uploading files, etc.)</p>
+                        <code>xoxb-XXXXXXXXXXXX-XXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXX</code>
+                        <p style="margin-top: 1rem; margin-bottom: 0;"><strong>Click the "Copy" button</strong> next to the token and save it securely.</p>
+                    </div>
+
+                    <div class="warning-block">
+                        <h4><strong>Security Warning</strong></h4>
+                        <p>This token provides access to your Slack workspace. <strong>Never commit it to version control</strong> or share it publicly. 
+                        Store it securely and use environment variables to pass it to your application.</p>
+                    </div>
+                </article>
+
+                <!-- STEP 4 -->
+                <article class="post" id="step4">
+                    <header>
+                        <div class="title">
+                            <h2><span class="step-number">4</span>Create App-Level Token</h2>
+                            <p>Generate a token for Socket Mode connections</p>
+                        </div>
+                    </header>
+
+                    <h3>Navigate to Basic Information</h3>
+                    <p>From the left sidebar, click on:</p>
+                    <div class="command-block">Basic Information</div>
+
+                    <h3>Find App-Level Tokens Section</h3>
+                    <p>Scroll down on the Basic Information page until you find the <strong>"App-Level Tokens"</strong> section.</p>
+
+                    <h3>Generate New Token</h3>
+                    <p>Click the <strong>"Generate Token and Scopes"</strong> button.</p>
+                    <p>A modal will appear asking you to:</p>
+                    <ol>
+                        <li><strong>Name your token:</strong> Enter a descriptive name (e.g., "Socket Mode Token")</li>
+                        <li><strong>Add scopes:</strong> Click "Add Scope" and select <code>connections:write</code></li>
+                        <li>Click <strong>"Generate"</strong></li>
+                    </ol>
+
+                    <div class="note-block">
+                        <strong>Required Scope:</strong> The <code>connections:write</code> scope is essential for Socket Mode. 
+                        Without it, your bot won't be able to establish a WebSocket connection to Slack.
+                    </div>
+
+                    <h3>Copy the App-Level Token</h3>
+                    <p>After generation, you'll see your new token. It starts with:</p>
+
+                    <div class="token-card">
+                        <h4>App-Level Token</h4>
+                        <p>This token is used for establishing Socket Mode connections</p>
+                        <code>xapp-X-XXXXXXXXXXXX-XXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</code>
+                        <p style="margin-top: 1rem; margin-bottom: 0;"><strong>Click the "Copy" button</strong> and save it securely. 
+                        You can only see this token once, so make sure you copy it now!</p>
+                    </div>
+
+                    <div class="warning-block">
+                        <h4><strong>One-Time Display</strong></h4>
+                        <p>The App-Level Token is only displayed once after generation. If you lose it, you'll need to generate a new one. 
+                        Make sure to copy and store it immediately.</p>
+                    </div>
+                </article>
+
+                <!-- STEP 5 -->
+                <article class="post" id="step5">
+                    <header>
+                        <div class="title">
+                            <h2><span class="step-number">5</span>Configure User Group</h2>
+                            <p>Restrict bot access to authorized users only</p>
+                        </div>
+                    </header>
+
+                    <p>The Sales Assistant bot uses Slack User Groups to control access. Only users who belong to the configured 
+                    User Group will be able to interact with the bot. This is a security measure to ensure that only authorized 
+                    personnel can query your sales data.</p>
+
+                    <h3>Create a User Group (if needed)</h3>
+                    <p>If you don't already have a User Group for authorized users, you'll need to create one.</p>
+
+                    <h4>Option A: From Slack Desktop/Web</h4>
+                    <ol>
+                        <li>In Slack, click on <strong>"More"</strong> in the left sidebar</li>
+                        <li>Select <strong>"People & user groups"</strong></li>
+                        <li>Click the <strong>"User Groups"</strong> tab</li>
+                        <li>Click <strong>"New User Group"</strong></li>
+                        <li>Fill in the details:
+                            <ul>
+                                <li><strong>Name:</strong> e.g., "Sales Assistant Users"</li>
+                                <li><strong>Handle:</strong> e.g., "sales-assistant-users"</li>
+                                <li><strong>Purpose:</strong> e.g., "Users authorized to use the Sales Assistant bot"</li>
+                            </ul>
+                        </li>
+                        <li>Add the users who should have access</li>
+                        <li>Click <strong>"Create"</strong></li>
+                    </ol>
+
+                    <div class="note-block">
+                        <strong>Documentation:</strong> For detailed instructions on creating and managing User Groups, see the official 
+                        <a href="https://slack.com/help/articles/212906697-Create-and-edit-user-groups" target="_blank">Slack Help Center article</a>.
+                    </div>
+
+                    <h3>Get the User Group ID</h3>
+                    <p>Once you have a User Group, you need to obtain its ID. The easiest way is through the Slack web interface:</p>
+
+                    <ol>
+                        <li>Open Slack in your web browser (not the desktop app)</li>
+                        <li>Navigate to <strong>People & user groups</strong></li>
+                        <li>Click on the User Group you want to use</li>
+                        <li>Look at the URL in your browser's address bar</li>
+                    </ol>
+
+                    <p>The URL will look something like this:</p>
+                    <div class="url-block">
+                        https://app.slack.com/client/TXXXXXXXX/browse-user-groups/user_groups/<strong>SXXXXXXXXXX</strong>
+                    </div>
+
+                    <p>The User Group ID is the part that starts with <code>S</code> at the end of the URL.</p>
+
+                    <div class="token-card">
+                        <h4>User Group ID</h4>
+                        <p>This ID identifies the group of users authorized to use the bot</p>
+                        <code>SXXXXXXXXXX</code>
+                        <p style="margin-top: 1rem; margin-bottom: 0;"><strong>Copy this ID</strong> — you'll need it for the environment configuration.</p>
+                    </div>
+
+                    <h3>How Access Control Works</h3>
+                    <p>When a user sends a message to the bot:</p>
+                    <ol>
+                        <li>The bot checks if the user belongs to the configured User Group</li>
+                        <li>If <strong>yes</strong>: the message is processed normally</li>
+                        <li>If <strong>no</strong>: the user receives a denial message and the request is blocked</li>
+                    </ol>
+
+                    <div class="warning-block">
+                        <h4><strong>Important Considerations</strong></h4>
+                        <p><strong>Adding/Removing Users:</strong> Changes to User Group membership take effect within 2 minutes (the bot caches the member list for performance).</p>
+                        <p><strong>Group Management:</strong> Only workspace admins or designated group managers can add/remove members from the User Group.</p>
+                    </div>
+                </article>
+
+                <!-- STEP 6: Generate RSA Keypair -->
+                <article class="post" id="step6">
+                    <header>
+                        <div class="title">
+                            <h2><span class="step-number">6</span>Generate RSA Keypair</h2>
+                            <p>Create authentication keys for Snowflake</p>
+                        </div>
+                    </header>
+
+                    <h3>Why RSA Keys?</h3>
+                    <p>Snowflake service accounts use RSA key-pair authentication instead of passwords. This provides:</p>
+                    <ul>
+                        <li><strong>Enhanced Security:</strong> No passwords to store or rotate</li>
+                        <li><strong>Automation-Friendly:</strong> Ideal for service accounts and CI/CD pipelines</li>
+                        <li><strong>Non-Interactive:</strong> No MFA prompts for automated processes</li>
+                    </ul>
+
+                    <h3>Generate the Key Pair</h3>
+                    <p>Open your terminal and run these commands to generate a 2048-bit RSA key pair:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Terminal - Generate Private Key</span>
+                        </div>
+                        <pre><code># Generate private key in PKCS#8 format (required by Snowflake)
+openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -out rsa_key.p8 -nocrypt</code></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Terminal - Extract Public Key</span>
+                        </div>
+                        <pre><code># Extract the public key from the private key
+openssl rsa -in rsa_key.p8 -pubout -out rsa_key.pub</code></pre>
+                    </div>
+
+                    <h3>Verify Your Keys</h3>
+                    <p>You should now have two files in your current directory:</p>
+
+                    <div class="info-block">
+                        <h4>Generated Files</h4>
+                        <ul>
+                            <li><code>rsa_key.p8</code> — Private key (keep this SECRET, never commit to git)</li>
+                            <li><code>rsa_key.pub</code> — Public key (this will be added to Snowflake)</li>
+                        </ul>
+                    </div>
+
+                    <h3>View the Public Key</h3>
+                    <p>Display your public key - you'll need this content for the next step:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Terminal</span>
+                        </div>
+                        <pre><code>cat rsa_key.pub</code></pre>
+                    </div>
+
+                    <p>The output will look like this:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Example Output</span>
+                        </div>
+                        <pre><code>-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
+...multiple lines of base64 encoded content...
+...AQAB
+-----END PUBLIC KEY-----</code></pre>
+                    </div>
+
+                    <div class="warning-block">
+                        <h4><strong>Security Best Practices</strong></h4>
+                        <p><strong>Private Key:</strong> Add <code>rsa_key.p8</code> to your <code>.gitignore</code> file immediately. Never commit private keys to version control.</p>
+                        <p><strong>Storage:</strong> Store the private key in a secure location (e.g., secrets manager, encrypted vault) for production deployments.</p>
+                    </div>
+                </article>
+
+                <!-- STEP 7: Create Snowflake Service Account -->
+                <article class="post" id="step7">
+                    <header>
+                        <div class="title">
+                            <h2><span class="step-number">7</span>Create Service Account</h2>
+                            <p>Set up a dedicated service user for the application</p>
+                        </div>
+                    </header>
+
+                    <h3>Why a Service Account?</h3>
+                    <p>A service account (TYPE = SERVICE) is a special type of Snowflake user designed for applications:</p>
+                    <ul>
+                        <li><strong>No Password:</strong> Cannot login via UI, only programmatic access</li>
+                        <li><strong>Audit Trail:</strong> All queries are tracked under a dedicated identity</li>
+                        <li><strong>Principle of Least Privilege:</strong> Grant only necessary permissions</li>
+                    </ul>
+
+                    <h3>Create the Service User</h3>
+                    <p>Run the following SQL in Snowflake (requires ACCOUNTADMIN or USERADMIN role):</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">SQL - Create Service Account</span>
+                        </div>
+                        <pre><code>-- Create the service account with RSA key authentication
+CREATE USER SVC_SALES_ASSISTANT
+    TYPE = SERVICE
+    RSA_PUBLIC_KEY = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...'
+    DEFAULT_WAREHOUSE = 'COMPUTE_WH'
+    DEFAULT_ROLE = 'SALES_ASSISTANT_ROLE'
+    COMMENT = 'Service account for Sales Assistant Slack bot';</code></pre>
+                    </div>
+
+                    <div class="warning-block">
+                        <h4><strong>Important: Public Key Format</strong></h4>
+                        <p>When copying your public key content, you must <strong>remove</strong> the header and footer lines:</p>
+                        <ul>
+                            <li>Remove: <code>-----BEGIN PUBLIC KEY-----</code></li>
+                            <li>Remove: <code>-----END PUBLIC KEY-----</code></li>
+                            <li>Remove: All line breaks (paste as a single continuous string)</li>
+                        </ul>
+                    </div>
+
+                    <h3>Grant Required Permissions</h3>
+                    <p>Grant the service account the role that has access to your Cortex Agent:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">SQL - Grant Role</span>
+                        </div>
+                        <pre><code>-- Grant the appropriate role to the service account
+GRANT ROLE SALES_ASSISTANT_ROLE TO USER SVC_SALES_ASSISTANT;
+
+-- Ensure the role has access to necessary objects
+GRANT USAGE ON DATABASE UNIFAI TO ROLE SALES_ASSISTANT_ROLE;
+GRANT USAGE ON SCHEMA UNIFAI.SALES_COPILOT TO ROLE SALES_ASSISTANT_ROLE;
+GRANT USAGE ON CORTEX AGENT UNIFAI.SALES_COPILOT.SALES_COPILOT_VNEXT 
+    TO ROLE SALES_ASSISTANT_ROLE;</code></pre>
+                    </div>
+
+                    <h3>Verify the Service Account</h3>
+                    <p>Confirm the user was created correctly:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">SQL - Verification</span>
+                        </div>
+                        <pre><code>-- Check user details
+DESCRIBE USER SVC_SALES_ASSISTANT;
+
+-- Verify RSA key is configured
+SELECT name, type, has_rsa_public_key 
+FROM SNOWFLAKE.ACCOUNT_USAGE.USERS 
+WHERE name = 'SVC_SALES_ASSISTANT';</code></pre>
+                    </div>
+                </article>
+
+                <!-- STEP 8: Create Thread Mappings Table -->
+                <article class="post" id="step8">
+                    <header>
+                        <div class="title">
+                            <h2><span class="step-number">8</span>Create Thread Table</h2>
+                            <p>Store conversation context between Slack and Cortex Agent</p>
+                        </div>
+                    </header>
+
+                    <h3>Why Thread Mappings?</h3>
+                    <p>The Sales Assistant maintains conversation context by mapping Slack thread IDs to Snowflake Cortex Agent thread IDs. This allows:</p>
+                    <ul>
+                        <li><strong>Conversation Continuity:</strong> The agent remembers previous messages in a thread</li>
+                        <li><strong>Context Awareness:</strong> Follow-up questions understand prior context</li>
+                        <li><strong>Multi-User Support:</strong> Each user's conversations are tracked independently</li>
+                    </ul>
+
+                    <h3>Create the Table</h3>
+                    <p>Run this SQL to create the thread mappings table:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">SQL - Create Thread Mappings Table</span>
+                        </div>
+                        <pre><code>-- Create table to store Slack-to-Snowflake thread mappings
+CREATE TABLE IF NOT EXISTS SLACK_THREAD_MAPPINGS (
+    SLACK_THREAD_ID     VARCHAR PRIMARY KEY,
+    SNOWFLAKE_THREAD_ID VARCHAR,
+    LAST_MESSAGE_ID     NUMBER,
+    USER_ID             VARCHAR,
+    CREATED_AT          TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP(),
+    UPDATED_AT          TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Add comment for documentation
+COMMENT ON TABLE SLACK_THREAD_MAPPINGS IS 
+    'Maps Slack thread IDs to Snowflake Cortex Agent thread IDs for conversation continuity';</code></pre>
+                    </div>
+
+                    <h3>Grant Permissions</h3>
+                    <p>Ensure the service account can read and write to this table:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">SQL - Grant Table Permissions</span>
+                        </div>
+                        <pre><code>-- Grant SELECT, INSERT, UPDATE on the thread mappings table
+GRANT SELECT, INSERT, UPDATE ON TABLE SLACK_THREAD_MAPPINGS 
+    TO ROLE SALES_ASSISTANT_ROLE;</code></pre>
+                    </div>
+
+                    <div class="info-block">
+                        <h4>Table Schema Explanation</h4>
+                        <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
+                            <tr style="background: #f5f5f5;">
+                                <th style="text-align:left; padding: 8px; border-bottom: 1px solid #ddd;">Column</th>
+                                <th style="text-align:left; padding: 8px; border-bottom: 1px solid #ddd;">Purpose</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>SLACK_THREAD_ID</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Unique identifier from Slack (the thread timestamp)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>SNOWFLAKE_THREAD_ID</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">UUID returned by Cortex Agent API</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>LAST_MESSAGE_ID</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Tracks the last processed message (for deduplication)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>USER_ID</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Slack user ID who initiated the thread</td>
+                            </tr>
+                        </table>
+                    </div>
+                </article>
+
+                <!-- STEP 9: Clone Repository -->
+                <article class="post" id="step9">
+                    <header>
+                        <div class="title">
+                            <h2><span class="step-number">9</span>Clone Repository</h2>
+                            <p>Download the Sales Assistant application code</p>
+                        </div>
+                    </header>
+
+                    <h3>Clone the Repository</h3>
+                    <p>Download the Sales Assistant Slack bot code from GitHub:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Terminal</span>
+                        </div>
+                        <pre><code># Clone the repository
+git clone https://github.com/evolaboratory/sales-assistant-slack.git
+
+# Navigate to the project directory
+cd sales-assistant-slack</code></pre>
+                    </div>
+
+                    <h3>Project Structure</h3>
+                    <p>The repository contains the following key files:</p>
+
+                    <div class="info-block">
+                        <h4>Key Files</h4>
+                        <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
+                            <tr style="background: #f5f5f5;">
+                                <th style="text-align:left; padding: 8px; border-bottom: 1px solid #ddd;">File</th>
+                                <th style="text-align:left; padding: 8px; border-bottom: 1px solid #ddd;">Purpose</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>app.py</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Main application entry point</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>requirements.txt</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Python dependencies</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>Dockerfile</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Container configuration</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>.env.example</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Template for environment variables</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <h3>Copy Environment Template</h3>
+                    <p>Create your local environment file from the template:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Terminal</span>
+                        </div>
+                        <pre><code># Copy the environment template
+cp .env.example .env</code></pre>
+                    </div>
+
+                    <div class="warning-block">
+                        <h4><strong>Private Key Location</strong></h4>
+                        <p>Copy your RSA private key (<code>rsa_key.p8</code>) generated in STEP 6 into the project directory, or note its absolute path for the next step.</p>
+                    </div>
+                </article>
+
+                <!-- STEP 10: Configure Environment Variables -->
+                <article class="post" id="step10">
+                    <header>
+                        <div class="title">
+                            <h2><span class="step-number">10</span>Environment Variables</h2>
+                            <p>Set up all required configuration for the application</p>
+                        </div>
+                    </header>
+
+                    <h3>Required Environment Variables</h3>
+                    <p>The Sales Assistant requires the following environment variables to be configured:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">.env File Template</span>
+                        </div>
+                        <pre><code># ============================================
+# SLACK CONFIGURATION
+# ============================================
+SLACK_BOT_TOKEN=xoxb-your-bot-token
+SLACK_APP_TOKEN=xapp-your-app-level-token
+ALLOWED_USER_GROUP=S0123456789
+
+# ============================================
+# SNOWFLAKE CONFIGURATION
+# ============================================
+SNOWFLAKE_ACCOUNT=your-account-identifier
+SNOWFLAKE_USER=SVC_SALES_ASSISTANT
+SNOWFLAKE_PRIVATE_KEY_PATH=./rsa_key.p8
+SNOWFLAKE_WAREHOUSE=COMPUTE_WH
+SNOWFLAKE_DATABASE=UNIFAI
+SNOWFLAKE_SCHEMA=SALES_COPILOT
+SNOWFLAKE_ROLE=SALES_ASSISTANT_ROLE
+
+# ============================================
+# CORTEX AGENT CONFIGURATION
+# ============================================
+CORTEX_AGENT_NAME=SALES_COPILOT_VNEXT</code></pre>
+                    </div>
+
+                    <h3>Where to Find Each Value</h3>
+                    
+                    <div class="info-block">
+                        <h4>Slack Values (from previous steps)</h4>
+                        <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
+                            <tr style="background: #f5f5f5;">
+                                <th style="text-align:left; padding: 8px; border-bottom: 1px solid #ddd;">Variable</th>
+                                <th style="text-align:left; padding: 8px; border-bottom: 1px solid #ddd;">Source</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>SLACK_BOT_TOKEN</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">OAuth & Permissions → Bot User OAuth Token (STEP 4)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>SLACK_APP_TOKEN</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Basic Information → App-Level Tokens (STEP 4)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>ALLOWED_USER_GROUP</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">User Group URL → ID starting with S (STEP 5)</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="info-block" style="margin-top: 20px;">
+                        <h4>Snowflake Values</h4>
+                        <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
+                            <tr style="background: #f5f5f5;">
+                                <th style="text-align:left; padding: 8px; border-bottom: 1px solid #ddd;">Variable</th>
+                                <th style="text-align:left; padding: 8px; border-bottom: 1px solid #ddd;">How to Find</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>SNOWFLAKE_ACCOUNT</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Your Snowflake URL: <code>https://&lt;account&gt;.snowflakecomputing.com</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>SNOWFLAKE_USER</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">The service account created in STEP 7</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;"><code>SNOWFLAKE_PRIVATE_KEY_PATH</code></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">Path to <code>rsa_key.p8</code> generated in STEP 6</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <h3>For Docker Deployments: Base64 Encode the Private Key</h3>
+                    <p>When deploying with Docker or in cloud environments, it's often easier to pass the private key as an environment variable rather than mounting a file:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Terminal - Base64 Encode Private Key</span>
+                        </div>
+                        <pre><code># Encode the private key as a single-line base64 string
+cat rsa_key.p8 | base64 | tr -d '\n'</code></pre>
+                    </div>
+
+                    <p>Then use this variable instead:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Environment Variable for Docker</span>
+                        </div>
+                        <pre><code># Use base64-encoded key instead of file path
+SNOWFLAKE_PRIVATE_KEY_BASE64=LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0t...</code></pre>
+                    </div>
+
+                    <div class="warning-block">
+                        <h4><strong>Security Reminder</strong></h4>
+                        <p><strong>Never commit .env files</strong> to version control. Add <code>.env</code> to your <code>.gitignore</code>.</p>
+                        <p><strong>Production deployments:</strong> Use your cloud provider's secrets manager (AWS Secrets Manager, Azure Key Vault, GCP Secret Manager, etc.)</p>
+                    </div>
+                </article>
+
+                <!-- STEP 11: Run the Application -->
+                <article class="post" id="step11">
+                    <header>
+                        <div class="title">
+                            <h2><span class="step-number">11</span>Run the Application</h2>
+                            <p>Start the Sales Assistant locally or deploy to the cloud</p>
+                        </div>
+                    </header>
+
+                    <h3>Option A: Run Locally with Python</h3>
+                    <p>For development and testing, you can run the application directly:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Terminal - Local Execution</span>
+                        </div>
+                        <pre><code># Install dependencies
+pip install -r requirements.txt
+
+# Run the application
+python app.py</code></pre>
+                    </div>
+
+                    <p>You should see output similar to:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Expected Output</span>
+                        </div>
+                        <pre><code>⚡️ Bolt app is running!
+🔌 Connected to Slack via Socket Mode
+✅ Snowflake connection established
+🤖 Sales Assistant is ready to receive messages</code></pre>
+                    </div>
+
+                    <h3>Option B: Run with Docker</h3>
+                    <p>For a containerized deployment:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Terminal - Docker Build & Run</span>
+                        </div>
+                        <pre><code># Build the Docker image
+docker build -t sales-assistant .
+
+# Run with environment file
+docker run --env-file .env sales-assistant
+
+# Or run with individual environment variables
+docker run \
+  -e SLACK_BOT_TOKEN=xoxb-... \
+  -e SLACK_APP_TOKEN=xapp-... \
+  -e ALLOWED_USER_GROUP=S... \
+  -e SNOWFLAKE_ACCOUNT=... \
+  -e SNOWFLAKE_USER=SVC_SALES_ASSISTANT \
+  -e SNOWFLAKE_PRIVATE_KEY_BASE64=... \
+  sales-assistant</code></pre>
+                    </div>
+
+                    <h3>Option C: Cloud Deployment</h3>
+                    <p>For production environments, you can deploy the containerized application to your preferred cloud provider:</p>
+
+                    <div class="info-block">
+                        <h4>Supported Cloud Platforms</h4>
+                        <p>The Sales Assistant can be deployed on any cloud platform that supports Docker containers:</p>
+                        <ul>
+                            <li><strong>AWS:</strong> ECS, EKS, App Runner, Fargate</li>
+                            <li><strong>Google Cloud:</strong> Cloud Run, GKE, Compute Engine</li>
+                            <li><strong>Microsoft Azure:</strong> Container Apps, AKS, Container Instances</li>
+                            <li><strong>Other:</strong> DigitalOcean, Heroku, Railway, Render, etc.</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-block">
+                        <h4><strong>Cloud Provider Selection</strong></h4>
+                        <p>The choice of cloud provider is at the <strong>client's discretion</strong> based on their existing infrastructure, compliance requirements, and preferences.</p>
+                        <p>Ensure you configure secrets management according to your cloud provider's best practices.</p>
+                    </div>
+
+                    <h3>Verify the Bot is Working</h3>
+                    <p>Once the application is running:</p>
+                    <ol>
+                        <li>Open Slack and navigate to a channel where the bot is installed</li>
+                        <li>Send a direct message to the bot or mention it in a channel</li>
+                        <li>The bot should respond with information from your Cortex Agent</li>
+                    </ol>
+
+                    <div class="success-block" style="background: #e8f5e9; border-left: 4px solid #4caf50; padding: 15px; margin: 20px 0;">
+                        <h4 style="color: #2e7d32; margin-top: 0;">🎉 Congratulations!</h4>
+                        <p>Your Sales Assistant is now connected to Slack and ready to help your sales team with pipeline insights from HubSpot, proposals, client stories, and more!</p>
+                    </div>
+                </article>
+
+                <!-- Verification -->
+                <article class="post" id="verification">
+                    <header>
+                        <div class="title">
+                            <h2>Final Verification</h2>
+                            <p>Confirm you have everything needed</p>
+                        </div>
+                    </header>
+
+                    <h3>Complete Setup Checklist</h3>
+                    <p>Verify you have completed all the following items:</p>
+                    
+                    <h4>Slack Configuration</h4>
+                    <ul class="checklist">
+                        <li><strong>Bot User OAuth Token</strong> — starts with <code>xoxb-</code></li>
+                        <li><strong>App-Level Token</strong> — starts with <code>xapp-</code></li>
+                        <li><strong>User Group ID</strong> — starts with <code>S</code></li>
+                        <li><strong>App installed</strong> in your target workspace</li>
+                    </ul>
+
+                    <h4>Snowflake Configuration</h4>
+                    <ul class="checklist">
+                        <li><strong>RSA Key Pair</strong> — <code>rsa_key.p8</code> (private) and <code>rsa_key.pub</code> (public)</li>
+                        <li><strong>Service Account</strong> — <code>SVC_SALES_ASSISTANT</code> created with RSA key</li>
+                        <li><strong>Thread Mappings Table</strong> — <code>SLACK_THREAD_MAPPINGS</code> created</li>
+                        <li><strong>Permissions Granted</strong> — Role has access to Cortex Agent and table</li>
+                    </ul>
+
+                    <h4>Environment Variables</h4>
+                    <ul class="checklist">
+                        <li><strong>.env file created</strong> with all required variables</li>
+                        <li><strong>Private key secured</strong> — file path or base64 encoded</li>
+                        <li><strong>Secrets not committed</strong> — <code>.env</code> and <code>rsa_key.p8</code> in <code>.gitignore</code></li>
+                    </ul>
+
+                    <div class="info-block">
+                        <h4>Quick Reference Links</h4>
+                        <ul>
+                            <li><a href="https://api.slack.com/apps" target="_blank">Slack App Dashboard</a> — Manage your app tokens and settings</li>
+                            <li><a href="https://docs.snowflake.com/en/user-guide/key-pair-auth" target="_blank">Snowflake Key-Pair Authentication</a> — Official documentation</li>
+                            <li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-agents" target="_blank">Cortex Agents Documentation</a> — API reference and guides</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-block" style="background: #e8f5e9; border-left: 4px solid #4caf50; padding: 15px; margin: 20px 0;">
+                        <h4 style="color: #2e7d32; margin-top: 0;">Setup Complete!</h4>
+                        <p>Your Sales Assistant is now fully configured and connected to Slack. Your sales team can start asking questions about pipeline data, proposals, client stories, and more directly from Slack!</p>
+                    </div>
+                </article>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <span class="logo">evolv</span>
+            <p>Sales Assistant Slack Bot &mdash; Powered by Snowflake Cortex Agents</p>
+        </footer>
+
+    </body>
+</html>

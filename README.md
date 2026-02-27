@@ -130,6 +130,8 @@ CREATE TABLE SLACK_THREAD_MAPPINGS (
 
 ### 3. Create Slack App
 
+> **Reference:** For detailed instructions, see the [Snowflake Cortex Agents + Slack Quickstart Guide](https://quickstarts.snowflake.com/guide/integrate_snowflake_cortex_agents_with_slack/index.html#3)
+
 1. Go to [api.slack.com/apps](https://api.slack.com/apps)
 2. Click **Create New App** → **From an app manifest**
 3. Select your workspace
@@ -139,6 +141,11 @@ CREATE TABLE SLACK_THREAD_MAPPINGS (
 7. Copy the **Bot User OAuth Token** (`xoxb-...`)
 8. Under **Basic Information** → **App-Level Tokens**, create a token with `connections:write` scope
 9. Copy the **App-Level Token** (`xapp-...`)
+
+**Useful Slack Documentation:**
+- [Socket Mode](https://api.slack.com/apis/connections/socket) - How the bot connects to Slack
+- [App Manifest](https://api.slack.com/reference/manifests) - Manifest file reference
+- [Bot Tokens](https://api.slack.com/authentication/token-types#bot) - Understanding bot tokens
 
 ### 4. Configure Environment Variables
 
@@ -278,6 +285,12 @@ The following OAuth scopes are required (configured in `manifest.json`):
 | `files:write` | Upload table images |
 | `usergroups:read` | Access control via User Groups |
 
+## Cloud Deployment
+
+For deploying to cloud providers, see the specific guides:
+
+- [Azure Container Instances](docs/DEPLOY_AZURE.md)
+
 ## Troubleshooting
 
 ### Bot not responding
@@ -297,6 +310,14 @@ The following OAuth scopes are required (configured in `manifest.json`):
 1. Ensure Playwright browsers are installed in the container
 2. Check that the Playwright version matches the Docker image version
 3. The bot will fallback to text-based tables if image rendering fails
+
+## Resources
+
+- [Snowflake Cortex Agents + Slack Quickstart](https://quickstarts.snowflake.com/guide/integrate_snowflake_cortex_agents_with_slack/index.html) - Official step-by-step guide
+- [Cortex Agents Documentation](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-agents) - API reference and setup
+- [Cortex Analyst Semantic Models](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst/semantic-model-spec) - Semantic model specification
+- [Snowflake REST API Authentication](https://docs.snowflake.com/en/developer-guide/sql-api/authenticating) - JWT keypair authentication
+- [Slack Bolt for JavaScript](https://slack.dev/bolt-js/concepts) - Slack Bolt SDK documentation
 
 ## License
 
