@@ -209,6 +209,7 @@ docker run --env-file .env sales-assistant-slack
 | `THREAD_MAPPINGS_TABLE` | Yes | Fully qualified table name for thread persistence |
 | `PPTX_OUTPUT_STAGE` | No | Snowflake stage for file outputs |
 | `AUTHORIZED_USERGROUP_ID` | No | Slack User Group ID to restrict access |
+| `ENABLE_ACCESS_CONTROL` | No | Enable/disable access control (default: true) |
 | `AUTH_CACHE_TTL_MINUTES` | No | Cache TTL for authorization checks (default: 2) |
 | `DEBUG_CORTEX` | No | Enable verbose Cortex API logging |
 | `ENABLE_STREAMING` | No | Enable streaming responses (default: true) |
@@ -233,7 +234,8 @@ Sales Assistant Slack/
 │
 ├── src/
 │   ├── config/
-│   │   └── constants.js         # Centralized configuration values
+│   │   ├── constants.js         # Centralized configuration values
+│   │   └── suggestedPrompts.js  # Suggested prompts for Slack Assistant UI
 │   │
 │   ├── services/
 │   │   ├── cortexChat.js        # Chat orchestrator with ThreadStore

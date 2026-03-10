@@ -95,8 +95,16 @@ properties:
             value: "https://your-account.snowflakecomputing.com/api/v2/databases/DB/schemas/SCHEMA/agents/AGENT:run"
           - name: THREAD_MAPPINGS_TABLE
             value: "DATABASE.SCHEMA.SLACK_THREAD_MAPPINGS"
+          - name: PPTX_OUTPUT_STAGE
+            value: "DATABASE.SCHEMA.OUTPUT_STAGE"
           - name: AUTHORIZED_USERGROUP_ID
             value: "YOUR_USERGROUP_ID"
+          - name: ENABLE_ACCESS_CONTROL
+            value: "true"
+          - name: AUTH_CACHE_TTL_MINUTES
+            value: "2"
+          - name: DEBUG_CORTEX
+            value: "false"
           - name: RSA_PRIVATE_KEY
             secureValue: "YOUR_BASE64_ENCODED_RSA_KEY"
   osType: Linux

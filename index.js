@@ -11,6 +11,7 @@ const { CortexAPI } = require('./src/services/snowflake');
 const { createChartBlocks, createTableBlocks, sendTableAsImage, createTextBlocks, extractStageFiles, removeStageFilePaths, createFileDownloadBlocks } = require('./src/blocks');
 const { StreamThrottle } = require('./src/utils/streamThrottle');
 const CONSTANTS = require('./src/config/constants');
+const SUGGESTED_PROMPTS = require('./src/config/suggestedPrompts');
 
 // Feature flag for streaming (can be disabled if issues arise)
 const ENABLE_STREAMING = process.env.ENABLE_STREAMING !== 'false';
@@ -73,26 +74,6 @@ const jwtGenerator = new JWTGenerator();
 const cortexAPI = CortexAPI.create(jwtGenerator);
 const cortexChat = new CortexChat(cortexAPI);
 
-// Suggested prompts for the assistant
-const SUGGESTED_PROMPTS = [
-    {
-        title: "Sentiment Analysis",
-        message: "Which accounts have the lowest sentiment scores?"
-    },
-    {
-        title: "Top Accounts",
-        message: "What are my top 10 accounts by open pipeline?"
-    },
-    {
-        title: "Recent Interactions",
-        message: "Show me customer interactions from last 7 days"
-    },
-    {
-        title: "Lost Deals",
-        message: "Which deals did we lose this quarter and why?"
-    }
-];
-
 // Initialize the Slack app
 const app = new App({
     token: process.env.SLACK_BOT_TOKEN,
@@ -103,6 +84,7 @@ const app = new App({
 // ============================================================================
 // ACCESS CONTROL - User Group based authorization
 // ============================================================================
+const ENABLE_ACCESS_CONTROL = process.env.ENABLE_ACCESS_CONTROL !== 'false';
 const AUTHORIZED_USERGROUP_ID = process.env.AUTHORIZED_USERGROUP_ID;
 const AUTH_CACHE_TTL_MS = (parseInt(process.env.AUTH_CACHE_TTL_MINUTES, 10) || 2) * 60 * 1000; // Default: 2 minutes
 
@@ -127,7 +109,7 @@ async function getAuthorizedUsers(client) {
 }
 
 // Global middleware for access control
-if (AUTHORIZED_USERGROUP_ID) {
+if (ENABLE_ACCESS_CONTROL && AUTHORIZED_USERGROUP_ID) {
     app.use(async ({ body, client, next, logger }) => {
         // Extract user ID from various event types
         // - message events: body.event.user
@@ -178,6 +160,8 @@ if (AUTHORIZED_USERGROUP_ID) {
         // Do NOT call next() - block unauthorized access
     });
     console.log(`[Auth] Access control enabled for User Group: ${AUTHORIZED_USERGROUP_ID}`);
+} else if (!ENABLE_ACCESS_CONTROL) {
+    console.log('[Auth] Access control disabled via ENABLE_ACCESS_CONTROL=false');
 } else {
     console.log('[Auth] No AUTHORIZED_USERGROUP_ID configured - bot is open to all users');
 }
