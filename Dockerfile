@@ -23,6 +23,7 @@
 # OPTIONAL ENVIRONMENT VARIABLES:
 #   - PPTX_OUTPUT_STAGE        : Snowflake stage for file outputs
 #   - AUTHORIZED_USERGROUP_ID  : Slack User Group ID for access control
+#   - ENABLE_ACCESS_CONTROL   : Enable/disable access control (default: true)
 #   - AUTH_CACHE_TTL_MINUTES   : Cache TTL for auth checks (default: 2)
 #   - DEBUG_CORTEX             : Enable debug logging (default: false)
 #
